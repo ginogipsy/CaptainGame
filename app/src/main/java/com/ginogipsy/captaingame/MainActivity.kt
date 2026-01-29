@@ -16,6 +16,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import com.ginogipsy.captaingame.ui.theme.CaptainGameTheme
 import kotlin.random.Random
@@ -43,6 +45,7 @@ class MainActivity : ComponentActivity() {
         val direction = remember { mutableStateOf("North") }
         val stormOrTreasure = remember { mutableStateOf("") }
         val movementList = remember { mutableStateListOf<String>() }
+        val haptic = LocalHapticFeedback.current
 
         // Funzione definita PRIMA dell'uso nei Button
         fun buttonClick(movement: String) {
@@ -55,12 +58,16 @@ class MainActivity : ComponentActivity() {
                 in 0..2 -> {
                     treasuresFound.intValue++
                     stormOrTreasure.value = "Found a Treasure! 💰"
+                    // Vibrazione corta per il tesoro
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 }
 
                 in 3..7 -> stormOrTreasure.value = "Nothing found... 🌊"
                 else -> {
                     stormOrTreasure.value = "Storm Ahead! ⛈️"
                     treasuresFound.intValue = (treasuresFound.intValue - 2).coerceAtLeast(0)
+                    // Vibrazione doppia o diversa per la tempesta (se supportata)
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 }
             }
         }

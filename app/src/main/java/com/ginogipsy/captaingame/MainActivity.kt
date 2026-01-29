@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Top, // Inizia dall'alto
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(32.dp))
@@ -115,14 +116,17 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            Button(onClick = {
-                movements.intValue = 0
-                direction.value = "North"
-                treasuresFound.intValue = 0
-                movementList.clear()
-                stormOrTreasure.value = ""
-            }) {
-                Text(text = "Reset Game")
+            Row {
+                Spacer(modifier = Modifier.size(16.dp))
+                Button(onClick = {
+                    movements.intValue = 0
+                    direction.value = "North"
+                    treasuresFound.intValue = 0
+                    movementList.clear()
+                    stormOrTreasure.value = ""
+                }) {
+                    Text(text = "Reset Game")
+                }
             }
 
             Spacer(modifier = Modifier.size(16.dp))

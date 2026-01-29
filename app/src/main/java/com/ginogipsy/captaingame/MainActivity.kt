@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -15,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
@@ -73,61 +71,41 @@ class MainActivity : ComponentActivity() {
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center, // Centra il contenuto verticalmente
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Statistiche in alto
-            Text(text = "Movements: ${movements.intValue}", style = MaterialTheme.typography.headlineSmall)
-            Text(text = "Treasure Found: ${treasuresFound.intValue}", style = MaterialTheme.typography.headlineSmall)
+            // --- SEZIONE STATISTICHE ---
+            Text(text = "Movements: ${movements.intValue}")
+            Text(text = "Treasure Found: ${treasuresFound.intValue}")
 
-            // Messaggio dell'evento (Tempesta/Tesoro) con spazio dedicato
-            Box(modifier = Modifier.height(60.dp), contentAlignment = Alignment.Center) {
-                Text(
-                    text = stormOrTreasure.value,
-                    color = when {
-                        stormOrTreasure.value.contains("Treasure") -> Color.Green
-                        stormOrTreasure.value.contains("Storm") -> Color.Red
-                        else -> MaterialTheme.colorScheme.primary
-                    }
-                )
-            }
+            Spacer(modifier = Modifier.height(24.dp)) // Spazio dopo le scritte
 
-            Spacer(modifier = Modifier.height(24.dp)) // Spazio extra prima dei bottoni
+            Text(text = stormOrTreasure.value, style = MaterialTheme.typography.titleLarge)
 
-            // --- AREA PULSANTI ---
+            Spacer(modifier = Modifier.height(40.dp)) // Grande spazio prima dei bottoni
+
+            // --- AREA PULSANTI (Layout a Croce) ---
             Button(onClick = { buttonClick("North") }) { Text("Sail North") }
 
-            Row(horizontalArrangement = Arrangement.Center) {
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(onClick = { buttonClick("West") }) { Text("Sail West") }
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(32.dp)) // Più spazio tra i bottoni laterali
                 Button(onClick = { buttonClick("East") }) { Text("Sail East") }
             }
 
+            Spacer(modifier = Modifier.height(8.dp))
+
             Button(onClick = { buttonClick("South") }) { Text("Sail South") }
-            // ---------------------
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp)) // Spazio prima della lista
 
-            // Lista dei movimenti con peso 1f per occupare lo spazio rimanente in basso
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                item {
-                    Text(
-                        text = "Log di Bordo",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-                itemsIndexed(movementList) { index, movement ->
-                    Text(text = "${index + 1}) $movement")
+            // --- LISTA STORICO ---
+            LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                item { Text("Log di Bordo:", style = MaterialTheme.typography.labelLarge) }
+                itemsIndexed(movementList) { index, m ->
+                    Text("${index + 1}) $m", modifier = Modifier.padding(4.dp))
                 }
             }
         }

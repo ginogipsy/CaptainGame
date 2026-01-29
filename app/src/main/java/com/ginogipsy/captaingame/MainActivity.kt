@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ginogipsy.captaingame.ui.theme.CaptainGameTheme
 import kotlin.random.Random
@@ -65,79 +66,61 @@ class MainActivity : ComponentActivity() {
         }
 
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center, // Centra il contenuto verticalmente
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
+            // Statistiche in alto
+            Text(text = "Movements: ${movements.intValue}", style = MaterialTheme.typography.headlineSmall)
+            Text(text = "Treasure Found: ${treasuresFound.intValue}", style = MaterialTheme.typography.headlineSmall)
 
-            Text(text = "Movements: ${movements.intValue}", color = MaterialTheme.colorScheme.primary)
-            Text(text = "Treasure Found: ${treasuresFound.intValue}", color = MaterialTheme.colorScheme.primary)
-            Text(text = "Current Direction: ${direction.value}", color = MaterialTheme.colorScheme.primary)
-
-            // Messaggio colorato
-            Text(
-                text = stormOrTreasure.value,
-                color = when {
-                    stormOrTreasure.value.contains("Treasure") -> androidx.compose.ui.graphics.Color(0xFF4CAF50) // Verde
-                    stormOrTreasure.value.contains("Storm") -> androidx.compose.ui.graphics.Color.Red
-                    else -> MaterialTheme.colorScheme.secondary
-                }
-            )
-
-            Row {
-                Spacer(modifier = Modifier.size(16.dp))
-                Button(onClick = {
-                    buttonClick("North")
-                }) {
-                    Text(text = "Sail North")
-                }
-            }
-            Row {
-                Spacer(modifier = Modifier.size(16.dp))
-                Button(onClick = {
-                    buttonClick("West")
-                }) {
-                    Text(text = "Sail West")
-                }
-                Spacer(modifier = Modifier.size(16.dp))
-                Button(onClick = {
-                    buttonClick("East")
-                }) {
-                    Text(text = "Sail East")
-                }
-            }
-            Row {
-                Spacer(modifier = Modifier.size(16.dp))
-                Button(onClick = {
-                    buttonClick("South")
-                }) {
-                    Text(text = "Sail South")
-                }
+            // Messaggio dell'evento (Tempesta/Tesoro) con spazio dedicato
+            Box(modifier = Modifier.height(60.dp), contentAlignment = Alignment.Center) {
+                Text(
+                    text = stormOrTreasure.value,
+                    color = when {
+                        stormOrTreasure.value.contains("Treasure") -> Color.Green
+                        stormOrTreasure.value.contains("Storm") -> Color.Red
+                        else -> MaterialTheme.colorScheme.primary
+                    }
+                )
             }
 
-            Row {
-                Spacer(modifier = Modifier.size(16.dp))
-                Button(onClick = {
-                    movements.intValue = 0
-                    direction.value = "North"
-                    treasuresFound.intValue = 0
-                    movementList.clear()
-                    stormOrTreasure.value = ""
-                }) {
-                    Text(text = "Reset Game")
-                }
+            Spacer(modifier = Modifier.height(24.dp)) // Spazio extra prima dei bottoni
+
+            // --- AREA PULSANTI ---
+            Button(onClick = { buttonClick("North") }) { Text("Sail North") }
+
+            Row(horizontalArrangement = Arrangement.Center) {
+                Button(onClick = { buttonClick("West") }) { Text("Sail West") }
+                Spacer(modifier = Modifier.width(16.dp))
+                Button(onClick = { buttonClick("East") }) { Text("Sail East") }
             }
 
-            Spacer(modifier = Modifier.size(16.dp))
+            Button(onClick = { buttonClick("South") }) { Text("Sail South") }
+            // ---------------------
 
-            // LazyColumn con peso per scorrere correttamente
-            LazyColumn(modifier = Modifier.weight(1f)) {
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Lista dei movimenti con peso 1f per occupare lo spazio rimanente in basso
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 item {
-                    Text(text = "Past Directions:", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = "Log di Bordo",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(8.dp)
+                    )
                 }
                 itemsIndexed(movementList) { index, movement ->
-                    Text(text = "${index + 1}) $movement ", style = MaterialTheme.typography.bodyLarge)
+                    Text(text = "${index + 1}) $movement")
                 }
             }
         }

@@ -63,6 +63,7 @@ class MainActivity : ComponentActivity() {
             Text(text = "Movements: ${movements.intValue}", color = MaterialTheme.colorScheme.primary)
             Text(text = "Treasure Found: ${treasuresFound.intValue}", color = MaterialTheme.colorScheme.primary)
             Text(text = "Current Direction: ${direction.value}", color = MaterialTheme.colorScheme.primary)
+            Text(text = stormOrTreasure.value, color = MaterialTheme.colorScheme.primary)
             Spacer(modifier = Modifier.size(16.dp))
             Row {
                 Spacer(modifier = Modifier.size(16.dp))
@@ -72,6 +73,9 @@ class MainActivity : ComponentActivity() {
                     movementList.add("North")
                     if (Random.nextBoolean()) {
                         treasuresFound.value++
+                        stormOrTreasure.value = "Found a Treasure!"
+                    } else {
+                        stormOrTreasure.value = "Storm Ahead!"
                     }
                 }) {
                     Text(text = "Sail North")
@@ -85,6 +89,9 @@ class MainActivity : ComponentActivity() {
                     movementList.add("West")
                     if (Random.nextBoolean()) {
                         treasuresFound.value++
+                        stormOrTreasure.value = "Found a Treasure!"
+                    } else {
+                        stormOrTreasure.value = "Storm Ahead!"
                     }
                 }) {
                     Text(text = "Sail West")
@@ -96,6 +103,9 @@ class MainActivity : ComponentActivity() {
                     movementList.add("East")
                     if (Random.nextBoolean()) {
                         treasuresFound.value++
+                        stormOrTreasure.value = "Found a Treasure!"
+                    } else {
+                        stormOrTreasure.value = "Storm Ahead!"
                     }
                 }) {
                     Text(text = "Sail East")
@@ -109,6 +119,9 @@ class MainActivity : ComponentActivity() {
                     movementList.add("South")
                     if (Random.nextBoolean()) {
                         treasuresFound.value++
+                        stormOrTreasure.value = "Found a Treasure!"
+                    } else {
+                        stormOrTreasure.value = "Storm Ahead!"
                     }
                 }) {
                     Text(text = "Sail South")
@@ -121,6 +134,7 @@ class MainActivity : ComponentActivity() {
                     direction.value = "North"
                     treasuresFound.intValue = 0
                     movementList.clear()
+                    stormOrTreasure.value = ""
                 }) {
                     Text(text = "Reset")
                 }

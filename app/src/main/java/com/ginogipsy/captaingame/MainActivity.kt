@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun CaptainGame() {
-        val treasuresFound = remember { mutableIntStateOf(0) }
+        var treasuresFound by remember { mutableIntStateOf(0) }
         val movements = remember { mutableIntStateOf(0) }
         val direction = remember { mutableStateOf("North") }
         val stormOrTreasure = remember { mutableStateOf("") }
@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
             val randomInt = Random.nextInt(10)
             when (randomInt) {
                 in 0..2 -> {
-                    treasuresFound.intValue++
+                    treasuresFound++
                     stormOrTreasure.value = "Found a Treasure! 💰"
                     // Vibrazione corta per il tesoro
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
                 in 3..7 -> stormOrTreasure.value = "Nothing found... 🌊"
                 else -> {
                     stormOrTreasure.value = "Storm Ahead! ⛈️"
-                    treasuresFound.intValue = (treasuresFound.intValue - 2).coerceAtLeast(0)
+                    treasuresFound = (treasuresFound - 2).coerceAtLeast(0)
                     // Vibrazione doppia o diversa per la tempesta (se supportata)
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
 
@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
         ) {
             // --- SEZIONE STATISTICHE ---
             Text(text = "Movements: ${movements.intValue}")
-            Text(text = "Treasure Found: ${treasuresFound.intValue}")
+            Text(text = "Treasure Found: $treasuresFound")
             Text(text = "Direction: ${direction.value}")
 
             Spacer(modifier = Modifier.height(24.dp)) // Spazio dopo le scritte
@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
                 Button(onClick = {
                     movements.intValue = 0
                     direction.value = "North"
-                    treasuresFound.intValue = 0
+                    treasuresFound = 0
                     movementList.clear()
                     stormOrTreasure.value = ""
                 }) {
